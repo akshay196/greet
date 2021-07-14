@@ -1,4 +1,4 @@
-module github.com/akshay196/greet
+module github.com/akshay196/grpc-demo
 
 go 1.16
 

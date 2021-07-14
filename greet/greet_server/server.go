@@ -1,16 +1,28 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
 
-	pb "github.com/akshay196/greet/greetpb"
+	pb "github.com/akshay196/grpc-demo/greet/greetpb"
 	"google.golang.org/grpc"
 )
 
 type server struct {
 	pb.UnimplementedGreetServiceServer
+}
+
+func (*server) Greet(ctx context.Context, req *pb.GreetRequest) (*pb.GreetResponse, error) {
+	fmt.Printf("Greet is invoked by %v\n", req)
+	firstName := req.GetGreeting().GetFirstName()
+	// lastName := req.GetGreeting().GetLastName()
+	result := "Hello " + firstName
+	res := &pb.GreetResponse{
+		Result: result,
+	}
+	return res, nil
 }
 
 func main() {

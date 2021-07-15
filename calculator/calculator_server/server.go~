@@ -1,0 +1,40 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"net"
+
+	"github.com/akshay196/grpc-demo/calculator/calculatorpb"
+	"google.golang.org/grpc"
+)
+
+type server struct {
+	calculatorpb.UnimplementedSumServiceServer
+}
+
+func (*server) Sum(ctx context.Context, req *calculatorpb.SumRequest) (*calculatorpb.SumResponse, error) {
+	log.Printf("Sum is invoked by %v\n", req)
+	num1 := req.GetNum1()
+	num2 := req.GetNum2()
+	result := num1 + num2
+	res := &calculatorpb.SumResponse{
+		Sum: result,
+	}
+	return res, nil
+}
+
+func main() {
+	lis, err := net.Listen("tcp", "localhost:50051")
+	if err != nil {
+		log.Fatalf("Could not announce listener: %v", err)
+	}
+	fmt.Println("Listening on :50051")
+
+	s := grpc.NewServer()
+	calculatorpb.RegisterSumServiceServer(s, &server{})
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("Failed to start GRPC server: %v", err)
+	}
+}

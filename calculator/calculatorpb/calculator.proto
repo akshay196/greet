@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package calculatorpb;
+option go_package="github.com/akshay196/calculator/calculatorpb";
+
+message SumRequest {
+  int32 num1 = 1;
+  int32 num2 = 2;
+}
+
+message SumResponse {
+  int32 sum = 1;
+}
+
+message DivisionRequest {
+  int32 dividend_number = 1;
+  int32 divisor_number = 2;
+}
+
+message DivisionResponse {
+  double division_result = 1;
+}
+
+service CalculatorService {
+  rpc Sum (SumRequest) returns (SumResponse) {};
+
+  // error handling
+  // If the divisor_number is 0 then rpc return InvalidArgument error
+  // code.
+  rpc Divide (DivisionRequest) returns (DivisionResponse) {};
+}

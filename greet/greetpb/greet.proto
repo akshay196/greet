@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package greet;
+package greetpb;
 option go_package="github.com/akshay196/grpc-demo/greetpb";
 
 message Greeting {
@@ -9,14 +9,25 @@ message Greeting {
 }
 
 message GreetRequest {
- Greeting greeting = 1;
+  Greeting greeting = 1;
 }
 
 message GreetResponse {
   string result = 1;
 }
 
+message GreetWithDeadlineRequest {
+  Greeting greeting = 1;
+}
+
+message GreetWithDeadlineResponse {
+  string result = 1;
+}
+
 service GreetService{
   // Unary
   rpc Greet(GreetRequest) returns (GreetResponse) {};
+
+  // Unary with deadline
+  rpc GreetWithDeadline(GreetWithDeadlineRequest) returns (GreetWithDeadlineResponse) {};
 }
